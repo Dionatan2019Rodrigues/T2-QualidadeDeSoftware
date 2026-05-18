@@ -1,0 +1,31 @@
+# Ambiente virtual
+venv/
+env/
+ENV/
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+
+# Testes
+.pytest_cache/
+.coverage
+htmlcov/
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
