@@ -8,9 +8,9 @@ Python 3.12.3
 venv\Scripts\activate
 ```
 
-### Possível ERRO
+### Rodar Testes
 ERRO: execution of scripts is disabled
 SOLUÇÂO: 
 ```
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+pytest -v -s
 ```
