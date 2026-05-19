@@ -51,3 +51,84 @@ def test_logo_redirects_home(driver):
     home.click_logo()
 
     assert "caltech.edu" in driver.current_url
+
+# ==============================
+# TESTE 5: SEÇÃO DE HERO EXISTE
+# ==============================
+def test_hero_section_exists(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert home.hero_section_exists()
+
+# ==============================
+# TESTE 6: SEÇÃO DE HERO CONTÉM IMAGENS
+# ==============================
+def test_hero_has_images(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert len(home.hero_images()) > 0
+
+# ==============================
+# TESTE 7: SEÇÃO DE EVENTOS DESTACADOS EXISTE
+# ==============================
+def test_featured_events_section_exists(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert home.featured_events_exists()
+
+# ==============================
+# TESTE 8: SEÇÃO DE EVENTOS DESTACADOS CONTÉM ITENS
+# ==============================
+def test_featured_events_has_items(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert len(home.featured_events_items()) > 0
+
+# ==============================
+# TESTE 9: SEÇÃO DE NOTÍCIAS EXISTE
+# ==============================
+def test_news_section_exists(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert home.news_title_exists()
+
+# ==============================
+# TESTE 10: SEÇÃO DE NOTÍCIAS CONTÉM ARTIGOS
+# ==============================
+def test_news_has_articles(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert len(home.news_cards()) > 0
+
+# ==============================
+# TESTE 11: SEÇÃO DE LIFE AT CALTECH EXISTE
+# ==============================
+def test_life_section_exists(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert home.life_section_exists()
+
+# ==============================
+# TESTE 12: SEÇÃO DE LIFE AT CALTECH CONTÉM IMAGENS
+# ==============================
+def test_life_section_has_images(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert len(home.life_images()) > 0
+
+# ==============================
+# TESTE 13: ÍCONES DE MÍDIA SOCIAL EXISTEM
+# ==============================
+def test_social_icons_exist(driver):
+    home = HomePage(driver)
+    home.open()
+
+    assert len(home.social_icons()) > 0

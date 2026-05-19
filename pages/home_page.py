@@ -58,3 +58,60 @@ class HomePage:
         self.driver.execute_script("arguments[0].scrollIntoView();", logo)
         # clique seguro via JS
         self.driver.execute_script("arguments[0].click();", logo)
+
+    # ==============================
+    # HERO / BANNER
+    # ==============================
+    def hero_section_exists(self):
+        return len(self.driver.find_elements(By.CSS_SELECTOR, "section")) > 0
+
+    def hero_images(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "section img")
+
+    # ==============================
+    # FEATURED EVENTS
+    # ==============================
+    def featured_events_exists(self):
+        return len(self.driver.find_elements(By.XPATH, "//h2[contains(text(),'Featured Events')]")) > 0
+
+    def featured_events_items(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "section li")
+
+    # ==============================
+    # NEWS
+    # ==============================
+    def news_title_exists(self):
+        return len(self.driver.find_elements(By.XPATH, "//h2[contains(text(),'News')]")) > 0
+
+    def news_cards(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, ".article-teaser")
+
+    # ==============================
+    # LIFE AT CALTECH
+    # ==============================
+    def life_section_exists(self):
+        return len(self.driver.find_elements(By.XPATH, "//h2[contains(text(),'Life at Caltech')]")) > 0
+
+    def life_images(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "section img")
+
+    # ==============================
+    # SOCIAL / CONNECT
+    # ==============================
+    def social_icons(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "a svg")
+
+    # ==============================
+    # FOOTER
+    # ==============================
+    def footer_exists(self):
+        return self.driver.find_element(By.TAG_NAME, "footer").is_displayed()
+
+    def footer_links(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "footer a")
+
+    # ==============================
+    # LINKS GERAIS
+    # ==============================
+    def all_links(self):
+        return self.driver.find_elements(By.TAG_NAME, "a")
