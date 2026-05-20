@@ -1,185 +1,117 @@
-from pages.home_page import HomePage
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 
-# ==============================
-# TESTE 1: MENU PRINCIPAL
-# Verifica se o menu existe e se possui itens visíveis com textos esperados
-# ==============================
-def test_menu(driver):
-    home = HomePage(driver)
-    home.open()
+class HomePage:
 
-    # Verifica se o header (menu) está visível
-    assert home.menu_exists()
+    URL = "https://www.caltech.edu"
+    def __init__(self, driver):
+        self.driver = driver
 
-    # Verifica se existem itens no menu
-    menu_items = home.get_menu_items()
-    assert len(menu_items) > 0
+    # ==============================
+    # AÇÕES BÁSICAS
+    # ==============================
+    def open(self):
+        self.driver.get(self.URL)
 
-    # Valida se alguns textos esperados aparecem no menu
-    textos = [item.text for item in menu_items]
-    assert any("About" in t for t in textos)
-    assert any("Research" in t for t in textos)
+    def get_title(self):
+        return self.driver.title
 
-# ==============================
-# TESTE 2: DROPDOWN
-# Verifica se o dropdown do menu aparece ao passar o mouse (hover)
-# ==============================
-def test_dropdown(driver):
-    home = HomePage(driver)
-    home.open()
+    # ==============================
+    # MENU PRINCIPAL
+    # ==============================
+    def menu_exists(self):
+        return self.driver.find_element(By.TAG_NAME, "header").is_displayed()
+    
+    def get_menu_items(self):
+        # Pega itens do menu principal
+        return self.driver.find_elements(By.CSS_SELECTOR, "header nav a")
 
-    # Simula hover no primeiro item do menu
-    home.hover_on_menu(0)
+    # ==============================
+    # DROPDOWN (HOVER)
+    # ==============================
+    def hover_on_menu(self, index=0):
+        # Hover no item do menu (pode variar dependendo do site)
+        menu_items = self.get_menu_items()
+        actions = ActionChains(self.driver)
+        actions.move_to_element(menu_items[index]).perform()
 
-    # Verifica se algum dropdown ficou visível
-    assert home.dropdown_visible()
+    def dropdown_visible(self):
+        # Ajuste o seletor conforme o site real
+        dropdowns = self.driver.find_elements(By.CSS_SELECTOR, "header nav ul")
+        return any(d.is_displayed() for d in dropdowns)
 
-# ==============================
-# TESTE 3: LOGO
-# Verifica se o clique no logo redireciona para a homepage
-# ==============================
-def test_logo(driver):
-    home = HomePage(driver)
-    home.open()
+    # ==============================
+    # LOGO
+    # ==============================
+    def click_logo(self):
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.webdriver.common.by import By
+        wait = WebDriverWait(self.driver, 10)
+        # pega o link que contém uma imagem dentro do header (logo real)
+        logo = wait.until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//header//a[.//img]")
+            )
+        )
+        # scroll até o elemento
+        self.driver.execute_script("arguments[0].scrollIntoView();", logo)
+        # clique seguro via JS
+        self.driver.execute_script("arguments[0].click();", logo)
 
-    # Clica no logo
-    home.click_logo()
+    # ==============================
+    # HERO / BANNER
+    # ==============================
+    def hero_section_exists(self):
+        return len(self.driver.find_elements(By.CSS_SELECTOR, "section")) > 0
 
-    # Verifica se a URL contém o domínio principal
-    assert "caltech.edu" in driver.current_url
+    def hero_images(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "section img")
 
-# ==============================
-# TESTE 4: HERO
-# Verifica se a seção principal (hero) existe e possui imagens
-# ==============================
-def test_hero_section(driver):
-    home = HomePage(driver)
-    home.open()
+    # ==============================
+    # FEATURED EVENTS
+    # ==============================
+    def featured_events_exists(self):
+        return len(self.driver.find_elements(By.XPATH, "//h2[contains(text(),'Featured Events')]")) > 0
 
-    # Verifica existência da seção hero
-    assert home.hero_section_exists()
+    def featured_events_items(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "section li")
 
-    # Verifica se há imagens dentro da seção
-    assert len(home.hero_images()) > 0
+    # ==============================
+    # NEWS
+    # ==============================
+    def news_title_exists(self):
+        return len(self.driver.find_elements(By.XPATH, "//h2[contains(text(),'News')]")) > 0
 
-# ==============================
-# TESTE 5: FEATURED EVENTS
-# Verifica se a seção de eventos destacados existe e contém itens
-# ==============================
-def test_featured_events(driver):
-    home = HomePage(driver)
-    home.open()
+    def news_cards(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, ".article-teaser")
 
-    # Verifica existência da seção
-    assert home.featured_events_exists()
+    # ==============================
+    # LIFE AT CALTECH
+    # ==============================
+    def life_section_exists(self):
+        return len(self.driver.find_elements(By.XPATH, "//h2[contains(text(),'Life at Caltech')]")) > 0
 
-    # Verifica se há eventos listados
-    assert len(home.featured_events_items()) > 0
+    def life_images(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "section img")
 
-# ==============================
-# TESTE 6: NEWS
-# Verifica se a seção de notícias existe e contém cards/artigos
-# ==============================
-def test_news(driver):
-    home = HomePage(driver)
-    home.open()
+    # ==============================
+    # SOCIAL / CONNECT
+    # ==============================
+    def social_icons(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "a svg")
 
-    # Verifica título da seção de notícias
-    assert home.news_title_exists()
+    # ==============================
+    # FOOTER
+    # ==============================
+    def footer_exists(self):
+        return self.driver.find_element(By.TAG_NAME, "footer").is_displayed()
 
-    # Verifica se há notícias listadas
-    assert len(home.news_cards()) > 0
+    def footer_links(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, "footer a")
 
-# ==============================
-# TESTE 7: LIFE AT CALTECH
-# Verifica se a seção "Life at Caltech" existe e possui imagens
-# ==============================
-def test_life_section(driver):
-    home = HomePage(driver)
-    home.open()
-
-    # Verifica existência da seção
-    assert home.life_section_exists()
-
-    # Verifica se há imagens nessa seção
-    assert len(home.life_images()) > 0
-
-# ==============================
-# TESTE 8: SOCIAL ICONS
-# Verifica se os ícones de redes sociais estão presentes
-# ==============================
-def test_social_icons(driver):
-    home = HomePage(driver)
-    home.open()
-
-    # Verifica se existem ícones sociais
-    assert len(home.social_icons()) > 0
-
-# ==============================
-# TESTE 9: FOOTER
-# Verifica se o rodapé existe e contém links
-# ==============================
-def test_footer(driver):
-    home = HomePage(driver)
-    home.open()
-
-    # Verifica existência do rodapé
-    assert home.footer_exists()
-
-    # Verifica se há links no rodapé
-    assert len(home.footer_links()) > 0
-
-# ==============================
-# TESTE 10: LINKS GERAIS
-# Verifica se a página possui links (<a>)
-# ==============================
-def test_page_links(driver):
-    home = HomePage(driver)
-    home.open()
-
-    # Verifica se existem links na página
-    assert len(home.all_links()) > 0
-
-# ==============================
-# TESTE 11: IMAGENS
-# Verifica se a página possui imagens (<img>)
-# ==============================
-def test_page_images(driver):
-    home = HomePage(driver)
-    home.open()
-
-    images = driver.find_elements(By.TAG_NAME, "img")
-    assert len(images) > 0
-
-# ==============================
-# TESTE 12: SECTIONS
-# Verifica se a página possui seções (<section>)
-# ==============================
-def test_page_sections(driver):
-    home = HomePage(driver)
-    home.open()
-
-    sections = driver.find_elements(By.TAG_NAME, "section")
-    assert len(sections) > 0
-
-# ==============================
-# TESTE 13: BOTÕES
-# Verifica se a página possui botões (<button>)
-# ==============================
-def test_page_buttons(driver):
-    home = HomePage(driver)
-    home.open()
-
-    buttons = driver.find_elements(By.TAG_NAME, "button")
-    assert len(buttons) > 0
-
-# ==============================
-# TESTE 14: TÍTULO
-# Verifica se o título da página não está vazio
-# ==============================
-def test_page_title(driver):
-    home = HomePage(driver)
-    home.open()
-
-    assert home.get_title() != ""
+    # ==============================
+    # LINKS GERAIS
+    # ==============================
+    def all_links(self):
+        return self.driver.find_elements(By.TAG_NAME, "a")
