@@ -20,7 +20,7 @@ class HomePage:
     # MENU PRINCIPAL
     # ==============================
     def menu_exists(self):
-        return self.driver.find_element(By.TAG_NAME, "header").is_displayed()
+        return self.driver.find_element(By.TAG_NAME, "header").is_displayed() or self.driver.find_element(By.CSS_SELECTOR, ".slide-menu__opener").is_displayed()
     
     def get_menu_items(self):
         # Pega itens do menu principal
